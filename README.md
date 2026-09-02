@@ -5,9 +5,9 @@ Installers for [Crate Dig](https://cratedig.lemonsqueezy.com). Every release is 
 
 | Platform | File |
 | --- | --- |
-| Windows 10/11 | `Crate Dig Setup <version>.exe` |
-| macOS 11+ (Apple Silicon) | `Crate Dig-<version>-arm64.dmg` |
-| macOS 11+ (Intel) | `Crate Dig-<version>.dmg` |
+| Windows 10/11 | `Crate-Dig-Setup-<version>.exe` |
+| macOS 11+ (Apple Silicon) | `Crate-Dig-<version>-arm64.dmg` |
+| macOS 11+ (Intel) | `Crate-Dig-<version>-x64.dmg` |
 
 Install, then paste the license key from your receipt on the first screen.
 One key works on two machines; free a slot from Settings → License.
