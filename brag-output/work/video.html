@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Crate Dig 1.0.9 — brag</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{--bg:#101210;--panel:#181b18;--raised:#232823;--ink:#f2f4ed;--muted:#a5ada0;--line:#343c32;--accent:#d5f45a;--on-accent:#172010;
+  --orange:#ff6818;--cream:#fff7e9;--sky:#78d7f2;--gold:#e1ad45;
+  font:16px Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:var(--bg)}
+img{display:block;max-width:none}
+h1,h2,h3,p{margin:0}
+h2{font-weight:500;letter-spacing:-.055em;line-height:1.06}
+em{font-family:Georgia,'Gelasio',serif;font-style:italic;font-weight:400;letter-spacing:-.045em}
+.eyebrow{font:600 19px/1.5 'Courier New',monospace;letter-spacing:.09em;color:var(--muted)}
+#stage{position:absolute;inset:0;overflow:hidden;background:
+  radial-gradient(ellipse 60% 70% at 72% 45%,#1e231e,transparent 70%),
+  radial-gradient(ellipse 50% 60% at 18% 50%,#161a16,transparent 70%),var(--bg)}
+.abs{position:absolute}
+
+/* ---------- Scene 1: the site's intro reel ---------- */
+#s1{position:absolute;inset:0;z-index:30;color:#f2ece0;background:radial-gradient(circle at 50% 58%,#ff681829,transparent 36%),radial-gradient(circle at 78% 20%,#ff681811,transparent 29%),linear-gradient(180deg,#10100e 0%,#070807 64%,#050605 100%)}
+.intro-top{position:absolute;top:40px;left:96px;display:flex;align-items:center;gap:18px;font:15px 'Courier New',monospace;letter-spacing:.12em;color:#fff7e9}
+.intro-top img{width:72px;height:72px}
+.intro-heading{position:absolute;top:150px;left:0;right:0;text-align:center}
+.intro-heading p{color:var(--sky);font:19px 'Courier New',monospace;letter-spacing:.16em;margin-bottom:18px}
+.intro-heading h2{font-size:84px;color:#fff7e9}
+.intro-lane{position:absolute;left:0;right:0;top:372px;height:450px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 13%,#000 87%,transparent)}
+.intro-needle{position:absolute;left:959px;top:0;bottom:0;z-index:3;width:2px;background:linear-gradient(180deg,transparent,#ff6818 12%,#f0c17d 50%,#ff6818 88%,transparent);box-shadow:0 0 22px #ff68187a}
+.intro-needle:before,.intro-needle:after{content:'';position:absolute;left:-10px;border:11px solid transparent}
+.intro-needle:before{top:0;border-top-color:#ff6818}.intro-needle:after{bottom:0;border-bottom-color:#ff6818}
+.intro-reel{position:absolute;top:24px;left:0;display:flex;gap:24px;width:max-content;will-change:transform}
+.intro-card{width:300px;flex:none;position:relative;border:1px solid;border-radius:5px;padding:20px;overflow:hidden;color:#fff7e9;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--sleeve) 18%,#171713),#090a09 64%);border-color:color-mix(in srgb,var(--sleeve) 40%,#ffffff14);box-shadow:0 22px 46px #0008,0 1px 0 #ffffff12 inset}
+.intro-card img{width:260px;height:260px;margin-bottom:22px}
+.intro-card small{display:block;font:13px 'Courier New',monospace;letter-spacing:.08em;color:var(--sleeve)}
+.intro-card strong{display:block;font-size:27px;letter-spacing:-.04em;margin:8px 0;white-space:nowrap}
+.intro-card span{font:14px 'Courier New',monospace;color:#afa79a}
+.intro-card.selected{--sleeve:#e1ad45!important;outline:3px solid #ffd268bd;outline-offset:7px;border-color:#ffd268bd;box-shadow:0 24px 58px #0009,0 0 60px #e1ad4540}
+.intro-status{position:absolute;top:858px;left:0;right:0;text-align:center;font:18px 'Courier New',monospace;letter-spacing:.1em;color:#afa79a}
+.intro-status .st{position:absolute;left:0;right:0;top:0}
+.intro-status strong{display:block;color:var(--gold);font-size:30px;margin-bottom:10px;letter-spacing:.12em}
+.intro-bottom{position:absolute;bottom:38px;left:0;right:0;text-align:center;font:13px 'Courier New',monospace;letter-spacing:.15em;color:#726e67}
+
+/* ---------- Persistent header ---------- */
+#header{position:absolute;top:44px;left:120px;right:120px;display:flex;align-items:center;justify-content:space-between;z-index:10}
+.brand{display:flex;align-items:center;gap:14px;font-size:33px;font-weight:800;letter-spacing:-1.6px}
+.brand img{width:58px;height:58px}
+.release{font:600 16px 'Courier New',monospace;letter-spacing:.12em;color:var(--muted);display:flex;align-items:center;gap:14px}
+.release b{color:var(--on-accent);background:var(--accent);padding:6px 10px;border-radius:4px;letter-spacing:.06em}
+
+/* ---------- Text column ---------- */
+.col{position:absolute;left:120px;width:680px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;z-index:5}
+.col>*{will-change:transform,opacity}
+.col .eyebrow{margin-bottom:26px}
+.col h2{font-size:92px}
+.col p.sub{font-size:29px;line-height:1.48;color:var(--muted);margin-top:30px;max-width:620px}
+.col p.sub b{color:var(--ink);font-weight:700}
+.slot{display:inline-block;width:80px;height:80px;vertical-align:-8px;margin-right:18px}
+.daws{display:flex;align-items:center;gap:22px;margin-top:44px}
+.daws img{width:44px;height:44px;object-fit:contain;opacity:.88}
+.tag{align-self:flex-start;background:var(--accent);color:#18200e;font:700 21px/1.4 'Courier New',monospace;letter-spacing:.06em;padding:12px 18px;margin-bottom:34px;transform-origin:0 50%}
+#flyrec{position:absolute;z-index:40;width:80px;height:80px;left:0;top:0;transform-origin:50% 50%;filter:drop-shadow(0 14px 20px #0007)}
+
+/* ---------- App window (site chrome) ---------- */
+#win{position:absolute;z-index:6;background:#080c08;border:1px solid #485140;border-radius:12px;overflow:hidden;box-shadow:0 50px 110px -40px #000d,0 0 0 1px #0006;transform-origin:50% 50%}
+.window-bar{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#272d24;color:#bbc5b4;font:12px 'Courier New',monospace;letter-spacing:.09em}
+.window-dots{color:#77866c;letter-spacing:4px}
+#content{position:relative;overflow:hidden;background:#090c08}
+#lib{position:absolute;left:0;top:0;width:940px;height:705px}
+#lib>img{width:940px;height:705px}
+#tint{position:absolute;background:#ff6818;mix-blend-mode:color}
+#playhead{position:absolute;width:2px;background:#fff7e9;box-shadow:0 0 10px #ff6818,0 0 2px #fff}
+#pausebtn{position:absolute;border-radius:50%;background:#171717;border:1px solid #5a5a5a;display:grid;place-items:center}
+#pausebtn i{display:inline-block;width:4px;height:11px;background:#f3efe8;margin:0 2px;border-radius:1px}
+#libdim{position:absolute;inset:0;background:#050605}
+
+/* ---------- Rebuilt 1.0.9 Library Sources panel (app style) ---------- */
+#callout{position:absolute;left:44px;top:92px;width:566px;font-family:Inter,Arial,sans-serif;color:#f3efe8;background:linear-gradient(180deg,#171717,#111);border:1px solid #3a3a3a;border-radius:12px;padding:24px 26px 24px;box-shadow:0 40px 90px #000e,0 0 0 1px #0008,0 0 70px #ff681814;transform-origin:0 0}
+.co-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.co-head b{font-size:13px;font-weight:800;letter-spacing:.14em;color:#5ec2ec}
+.co-head span{font-size:13px;font-weight:600;letter-spacing:.08em;color:#8d8a84}
+.rows{display:flex;flex-direction:column}
+.row{position:relative;overflow:hidden;height:78px;flex:none}
+.row-in{position:absolute;left:0;right:0;top:0;height:78px;display:flex;align-items:center;gap:16px;padding:0 12px 0 14px;border-top:1px solid #262626}
+.row:first-child .row-in{border-top-color:#2c2c2c}
+.row-in.sel{background:linear-gradient(90deg,#3a1d0c,#1a120c 70%);box-shadow:inset 3px 0 0 #ff6818}
+.fold{width:34px;height:28px;flex:none}
+.nm{flex:1;min-width:0}
+.nm strong{display:block;font-size:20px;font-weight:700;letter-spacing:-.01em}
+.nm small{display:block;font-size:13px;color:#9a958c;margin-top:4px;white-space:nowrap}
+.chip{position:relative;height:28px;min-width:152px;flex:none}
+.chip>span{position:absolute;right:0;top:0;height:28px;display:flex;align-items:center;gap:7px;padding:0 11px;border-radius:14px;font-size:11.5px;font-weight:800;letter-spacing:.09em;white-space:nowrap}
+.c-saved{color:#78d7f2;border:1px solid #23b9ea66;background:#0d2029}
+.c-ok{color:#a7a39b;border:1px solid #3a3a3a;background:#1a1a1a}
+.c-chg{color:#1a0d05;background:#ff6a13}
+.chk{width:22px;height:22px;flex:none;border-radius:5px;border:1.5px solid #555;display:grid;place-items:center;font-size:15px;font-weight:900;color:#1a0d05}
+.chk.on{background:#ff6a13;border-color:#ff6a13}
+.btns{display:flex;gap:12px;margin-top:18px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border-radius:7px;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.btn.ghost{flex:0 0 150px;border:1px solid #3d3d3d;background:#1b1b1b;color:#e9e4dc}
+.btn.fill{flex:1;background:#ff6a13;color:#1a0d05}
+.btn.wide{margin-top:12px;border:1px solid #3d3d3d;background:#1c1c1c;color:#f3efe8}
+.btn.wide .spin{display:inline-block;color:#ff6a13;font-size:22px;line-height:1}
+#scanrow{overflow:hidden;height:0}
+#scanbtn{margin-top:12px;background:#ff6a13;color:#1a0d05}
+
+/* ---------- Roulette frames ---------- */
+#roul{position:absolute;inset:0;background:radial-gradient(ellipse at center,#ff681817,transparent 65%),#080908}
+#roul img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;visibility:hidden}
+
+/* ---------- Cursor ---------- */
+#cursor{position:absolute;left:0;top:0;z-index:60;width:34px;height:44px;transform-origin:4px 3px;filter:drop-shadow(0 4px 8px #000a)}
+.ring{position:absolute;z-index:59;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;border:3px solid #fff7e9;left:0;top:0}
+
+/* ---------- Scene 6: checkout ---------- */
+#s6{position:absolute;inset:0;z-index:20;text-align:center;overflow:hidden;background:radial-gradient(ellipse 60% 50% at 50% 42%,#232823,transparent 70%),var(--panel)}
+#s6 .eyebrow{position:absolute;top:238px;left:0;right:0;font-size:21px}
+#s6 h2{position:absolute;top:292px;left:0;right:0;font-size:168px}
+#s6 .lock{position:absolute;top:524px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:18px;font-size:48px;font-weight:800;letter-spacing:-2px}
+#s6 .lock img{width:76px;height:76px}
+#s6 .lock span{font-weight:400;color:var(--muted);letter-spacing:-1px}
+#s6 .meta{position:absolute;top:622px;left:0;right:0;font-size:28px;color:var(--muted)}
+#s6 .meta i{font-style:normal;color:#5b6456;margin:0 16px}
+#s6 .cta{position:absolute;top:700px;left:50%;display:inline-flex;align-items:center;gap:26px;background:var(--accent);color:var(--on-accent);padding:24px 36px;border-radius:8px;font-size:30px;white-space:nowrap}
+#outrorec{position:absolute;width:760px;height:760px;left:580px;top:1080px;filter:drop-shadow(0 -10px 40px #0008)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="hblur" x="-30%" y="0" width="160%" height="100%"><feGaussianBlur id="hblurS" stdDeviation="0 0"/></filter>
+  <filter id="hblur2" x="-10%" y="0" width="120%" height="100%"><feGaussianBlur id="hblurS2" stdDeviation="0 0"/></filter>
+</svg>
+<div id="stage">
+
+  <!-- Header (scenes 2–5) -->
+  <header id="header">
+    <div class="brand"><img src="site/assets/crate-dig-logo-mark.svg" alt=""><span>Crate Dig</span></div>
+    <div class="release"><b>1.0.9</b><span>OUT NOW · WINDOWS &amp; MAC</span></div>
+  </header>
+
+  <!-- Scene 2 text -->
+  <div class="col" id="c2">
+    <p class="eyebrow">FOR THE IDEAS YOU ALMOST FORGOT.</p>
+    <h2>Your projects.<br><span class="slot" id="slot"></span><em>Organized.</em></h2>
+    <p class="sub">Browse projects, preview samples, build your own crates.</p>
+    <div class="daws" id="daws">
+      <img src="site/assets/daws/ableton-live.png" alt=""><img src="site/assets/daws/fl-studio.png" alt=""><img src="site/assets/daws/cubase.png" alt=""><img src="site/assets/daws/reaper.png" alt=""><img src="site/assets/daws/pro-tools.png" alt=""><img src="site/assets/daws/bitwig-studio.png" alt=""><img src="site/assets/daws/reason.png" alt=""><img src="site/assets/daws/logic-pro.png" alt=""><img src="site/assets/daws/studio-one.png" alt="">
+    </div>
+  </div>
+
+  <!-- Scenes 3–4 text -->
+  <div class="col" id="c34">
+    <div class="tag" id="tag">NEW IN 1.0.9</div>
+    <div style="position:relative">
+      <h2 id="h3">Every music folder.<br><em>Remembered.</em></h2>
+      <div id="h4wrap" style="position:absolute;left:0;top:0;right:0">
+        <h2 id="h4">No rescan<br><em>at every launch.</em></h2>
+        <p class="sub" id="p4">Saved indexes open as-is. <b>Check for crate updates</b> when you choose.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 5 text -->
+  <div class="col" id="c5">
+    <p class="eyebrow" id="e5">CRATE ROULETTE — LET CHANCE START SOMETHING</p>
+    <h2 id="h5">Less overthinking.<br><em>More “oh, this one.”</em></h2>
+  </div>
+
+  <!-- App window -->
+  <div id="win">
+    <div class="window-bar"><span class="window-dots">● ● ●</span><span id="wlabel">YOUR LIBRARY</span><span>CRATE DIG</span></div>
+    <div id="content">
+      <div id="lib">
+        <img src="site/assets/library.png" alt="">
+        <div id="tint"></div>
+        <div id="playhead"></div>
+        <div id="pausebtn"><span><i></i><i></i></span></div>
+        <div id="libdim"></div>
+      </div>
+      <div id="roul"></div>
+      <div id="callout">
+        <div class="co-head"><b>LIBRARY SOURCES</b><span id="count">1 FOLDER</span></div>
+        <div class="rows">
+          <div class="row" id="r0"><div class="row-in"><svg class="fold" viewBox="0 0 34 28"><path d="M2 5.5a2.5 2.5 0 0 1 2.5-2.5h8l3 3.5h14a2.5 2.5 0 0 1 2.5 2.5v14.5a2.5 2.5 0 0 1-2.5 2.5h-25A2.5 2.5 0 0 1 2 23.5z" fill="none" stroke="#ff6a13" stroke-width="2.4" stroke-linejoin="round"/></svg><div class="nm"><strong>Music</strong><small>C:\Users\Crate Dig User\Music</small></div><div class="chip" id="k0"></div></div></div>
+          <div class="row" id="r1"><div class="row-in"><svg class="fold" viewBox="0 0 34 28"><path d="M2 5.5a2.5 2.5 0 0 1 2.5-2.5h8l3 3.5h14a2.5 2.5 0 0 1 2.5 2.5v14.5a2.5 2.5 0 0 1-2.5 2.5h-25A2.5 2.5 0 0 1 2 23.5z" fill="none" stroke="#ff6a13" stroke-width="2.4" stroke-linejoin="round"/></svg><div class="nm"><strong>Sample Packs</strong><small>D:\Sample Packs</small></div><div class="chip" id="k1"></div></div></div>
+          <div class="row" id="r2"><div class="row-in"><svg class="fold" viewBox="0 0 34 28"><path d="M2 5.5a2.5 2.5 0 0 1 2.5-2.5h8l3 3.5h14a2.5 2.5 0 0 1 2.5 2.5v14.5a2.5 2.5 0 0 1-2.5 2.5h-25A2.5 2.5 0 0 1 2 23.5z" fill="none" stroke="#ff6a13" stroke-width="2.4" stroke-linejoin="round"/></svg><div class="nm"><strong>Old Sessions</strong><small>E:\Old Sessions</small></div><div class="chip" id="k2"></div></div></div>
+        </div>
+        <div class="btns"><div class="btn ghost" id="browse">Browse</div><div class="btn fill" id="addbtn">+ Add folder</div></div>
+        <div class="btn wide" id="checkbtn"><span class="spin" id="spin">↻</span>Check for crate updates</div>
+        <div id="scanrow"><div class="btn" id="scanbtn">Scan selected</div></div>
+      </div>
+    </div>
+  </div>
+
+  <img id="flyrec" src="site/assets/vinyl.svg" alt="">
+
+  <!-- Scene 6 -->
+  <section id="s6">
+    <p class="eyebrow" id="e6">THERE’S SOMETHING GOOD IN THERE.</p>
+    <h2 id="h6">Go on. <em>Dig it up.</em></h2>
+    <div class="lock" id="lock6"><img src="site/assets/crate-dig-logo-mark.svg" alt="">Crate Dig <span>1.0.9</span></div>
+    <p class="meta" id="meta6">Windows &amp; Mac<i>·</i>$14.99 once<i>·</i>No subscriptions</p>
+    <div class="cta" id="cta6">cratedig.app <span>↗</span></div>
+    <img id="outrorec" src="site/assets/vinyl.svg" alt="">
+  </section>
+
+  <!-- Scene 1 -->
+  <section id="s1">
+    <div class="intro-top"><img src="site/assets/crate-dig-logo-mark.svg" alt="">CRATE DIG</div>
+    <div class="intro-heading" id="ih"><p>CRATE ROULETTE</p><h2>Something good is <em>in here.</em></h2></div>
+    <div class="intro-lane"><div class="intro-needle"></div><div class="intro-reel" id="reel"></div></div>
+    <div class="intro-status"><div class="st" id="st0">DIGGING THROUGH THE STACKS…</div><div class="st" id="st1"><strong>YOUR NEXT HIT</strong>YOU HAD IT ALL ALONG.</div></div>
+    <p class="intro-bottom">YOUR NEXT IDEA. ALREADY IN YOUR COLLECTION.</p>
+  </section>
+
+  <svg id="cursor" viewBox="0 0 34 44"><path d="M4 3 L4 34 L11.5 27 L16.5 39 L22 36.6 L17 25 L27.5 25 Z" fill="#fff" stroke="#0b0b0b" stroke-width="2.2" stroke-linejoin="round"/></svg>
+  <div class="ring" id="ring"></div>
+</div>
+
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const BEAT = 2/3, FPS = 30, DURATION = 64/3;
+const S2 = 4, S3 = 8, S4 = 32/3, S5 = 44/3, S6 = 52/3;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+function cubicBezier(x1, y1, x2, y2) {
+  const cx = 3*x1, bx = 3*(x2-x1)-cx, ax = 1-cx-bx, cy = 3*y1, by = 3*(y2-y1)-cy, ay = 1-cy-by;
+  const sx = t => ((ax*t+bx)*t+cx)*t, sy = t => ((ay*t+by)*t+cy)*t;
+  return x => {
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    let lo = 0, hi = 1, t = x;
+    for (let i = 0; i < 50; i++) { const v = sx(t); if (Math.abs(v - x) < 1e-7) break; if (v < x) lo = t; else hi = t; t = (lo + hi) / 2; }
+    return sy(t);
+  };
+}
+const siteEase = cubicBezier(.22, 1, .36, 1);
+const inOut = cubicBezier(.65, 0, .35, 1);
+const easeIn = p => p * p * p;
+const cubicOut = p => 1 - Math.pow(1 - p, 3);
+
+// Enter/leave helper: in at a (dur), out at b (outDur).
+function show(el, t, a, b, o = {}) {
+  const dur = o.dur ?? .55, dy = o.dy ?? 28, outDur = o.outDur ?? .22, outDy = o.outDy ?? -16;
+  const pin = siteEase(seg(t, a, a + dur));
+  const pout = b == null ? 0 : easeIn(seg(t, b, b + outDur));
+  const op = pin * (1 - pout);
+  el.style.opacity = op;
+  el.style.visibility = op <= .001 ? 'hidden' : 'visible';
+  el.style.transform = `translateY(${(1 - pin) * dy + pout * outDy}px)` + (o.extra || '');
+  return op;
+}
+const vis = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
+
+/* ---------- Scene 1 reel ---------- */
+const names = ['Banger #67', '2021 Nostalgia', 'Final_final_v9', '3AM Bad Decisions', 'Your Next Hit'];
+const colors = ['#aa4b20', '#23b9ea', '#d8c29d', '#b95d69', '#72858c'];
+const reel = $('#reel');
+const CARDS = 20, WIN = 14, START = 3, PITCH = 324, LAND = 2.0;
+for (let i = 0; i < CARDS; i++) {
+  const n = i === WIN ? 4 : i < WIN ? (i + 2) % 4 : (i - WIN - 1) % 4;   // winner is the only "Your Next Hit"
+  const card = document.createElement('article'); card.className = 'intro-card';
+  card.style.setProperty('--sleeve', colors[n]);
+  card.innerHTML = `<img src="site/assets/vinyl.svg" alt=""><small>FROM THE COLLECTION</small><strong>${names[n]}</strong><span>PROJECT / ${String(i + 1).padStart(2, '0')}</span>`;
+  reel.append(card);
+}
+const cards = [...reel.children], winner = cards[WIN];
+const centerOf = i => 960 - (i * PITCH + 150);
+const reelX = t => lerp(centerOf(START), centerOf(WIN), cubicOut(clamp(t / LAND)));
+
+/* ---------- Roulette frames ---------- */
+const roul = $('#roul');
+const frames = [];
+for (let i = 1; i <= 13; i++) frames.push(`site/assets/roulette-frames/reel-${String(i).padStart(2, '0')}.webp`);
+for (let i = 1; i <= 40; i++) frames.push(`site/assets/roulette-frames/sample-${String(i).padStart(2, '0')}.webp`);
+const frameEls = frames.map(src => { const im = new Image(); im.src = src; roul.append(im); return im; });
+
+/* ---------- Geometry ---------- */
+const WX = 860, WW = 940, WH43 = 705, WH169 = 940 * 9 / 16, BAR = 36;
+const SC = WW / 1440;                      // library.png → window content
+const lib = p => [p[0] * SC, p[1] * SC];   // screenshot px → content px
+const win = $('#win'), content = $('#content');
+const WAVE = { x0: 812, x1: 1385, y0: 299, y1: 346 }, PLAY = [770, 322];
+
+let M = null; // measured anchors
+function measure() {
+  M = {};
+  render(3.0, true);
+  const r = winner.querySelector('img').getBoundingClientRect();
+  M.from = { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width };
+  render(S2 + 2.5, true);
+  const s = $('#slot').getBoundingClientRect();
+  M.to = { x: s.left + s.width / 2, y: s.top + s.height / 2, w: s.width };
+}
+
+/* ---------- Cursor ---------- */
+const cursor = $('#cursor'), ring = $('#ring');
+const centerRect = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+const winTop = () => parseFloat(win.style.top);
+const libAbs = p => [WX + p[0] * SC, winTop() + BAR + 1 + p[1] * SC];
+const P = {
+  off: () => [1780, 1020],
+  play: () => libAbs(PLAY),
+  rest2: () => libAbs([1010, 560]),
+  add: () => { const c = centerRect($('#addbtn')); return [c[0] - 30, c[1] + 4]; },
+  rest3: () => { const c = centerRect($('#addbtn')); return [c[0] + 60, c[1] + 70]; },
+  check: () => { const c = centerRect($('#checkbtn')); return [c[0] + 60, c[1] + 2]; },
+  checkNear: () => { const c = centerRect($('#checkbtn')); return [c[0] + 160, c[1] + 90]; },
+  scan: () => { const c = centerRect($('#scanbtn')); return [c[0] + 70, c[1] + 6]; },
+};
+const moves = [
+  [5.10, 5.85, 'off', 'play'],
+  [6.45, 7.70, 'play', 'rest2'],
+  [8.05, 8.58, 'rest2', 'add'],
+  [8.80, 9.24, 'add', 'add'],
+  [9.55, 10.30, 'add', 'rest3'],
+  [11.35, 11.90, 'checkNear', 'check'],
+  [12.95, 13.55, 'check', 'scan'],
+];
+const clicks = [6.0, 26/3, 28/3, 12.0];
+function cursorAt(t) {
+  let pos = P.off();
+  for (const [a, b, f, g] of moves) {
+    if (t < a) { pos = P[f](); break; }
+    if (t <= b) { const k = inOut(seg(t, a, b)); const p = P[f](), q = P[g](); pos = [lerp(p[0], q[0], k), lerp(p[1], q[1], k)]; break; }
+    pos = P[g]();
+  }
+  let op = seg(t, 5.1, 5.3) * (1 - seg(t, 10.5, 10.65)) + seg(t, 11.35, 11.5) * (1 - seg(t, 14.5, 14.65));
+  return { pos, op: clamp(op) };
+}
+
+/* ---------- Render ---------- */
+function render(t, measuring = false) {
+  // Scene 1
+  const s1op = 1 - easeIn(seg(t, S2, S2 + .2)) ;
+  $('#s1').style.opacity = s1op; vis($('#s1'), s1op > 0);
+  if (s1op > 0) {
+    const x = reelX(t);
+    reel.style.transform = `translateX(${x}px)`;
+    const v = Math.abs(reelX(t) - reelX(t - 1 / FPS));          // px per frame
+    const sd = v < .6 ? 0 : Math.min(48, v * .42);
+    reel.style.filter = sd ? 'url(#hblur)' : 'none';
+    $('#hblurS').setAttribute('stdDeviation', `${sd} 0`);
+    const sel = t >= LAND;
+    winner.classList.toggle('selected', sel);
+    const bump = seg(t, LAND, LAND + .42);
+    winner.style.transform = `scale(${1 + Math.sin(bump * Math.PI) * .045})`;
+    winner.querySelector('img').style.opacity = t >= S2 ? 0 : 1;
+    show($('#ih'), t, -.05, null, { dur: .4, dy: 18 });
+    const a = seg(t, LAND - .05, LAND + .1);
+    $('#st0').style.opacity = 1 - a;
+    const b = siteEase(seg(t, LAND + .02, LAND + .4));
+    $('#st1').style.opacity = b; $('#st1').style.transform = `translateY(${(1 - b) * 12}px)`;
+  }
+
+  // Header
+  show($('#header'), t, S2 + .38, S6 - .25, { dur: .6, dy: -14, outDy: -10 });
+
+  // Scene 2 text
+  const c2 = [...$('#c2').children];
+  c2.forEach((el, i) => show(el, t, S2 + .18 + i * .09, S3 - .28, { dur: .55 }));
+  [...$('#daws').children].forEach((el, i) => {
+    const p = siteEase(seg(t, S2 + .62 + i * .045, S2 + 1.07 + i * .045));
+    el.style.opacity = .88 * p; el.style.transform = `translateY(${(1 - p) * 14}px)`;
+  });
+
+  // Flying record: winner vinyl → headline slot
+  const fr = $('#flyrec');
+  if (M && M.to && t >= S2 && t < S3) {
+    const k = siteEase(seg(t, S2, S2 + .72));
+    const x = lerp(M.from.x, M.to.x, k), y = lerp(M.from.y, M.to.y, k) - Math.sin(k * Math.PI) * 70;
+    const sc = lerp(M.from.w, M.to.w, k) / 80;
+    const rot = 348 * k + Math.max(0, t - (S2 + .72)) * 110;
+    const out = easeIn(seg(t, S3 - .28, S3 - .06));
+    fr.style.opacity = 1 - out; vis(fr, true);
+    fr.style.transform = `translate(${x - 40}px,${y - 40 - out * 16}px) scale(${sc}) rotate(${rot}deg)`;
+  } else vis(fr, false);
+
+  // Scenes 3–4 text
+  show($('#tag'), t, S3 + .02, S5 - .12, { dur: .5, dy: 20, extra: ` rotate(${-4 + 4 * (1 - siteEase(seg(t, S3 + .02, S3 + .5)))}deg)` });
+  show($('#h3'), t, S3 + .1, S4 - .24, { dur: .5 });
+  show($('#h4'), t, S4 + .02, S5 - .12, { dur: .48 });
+  show($('#p4'), t, S4 + .12, S5 - .12, { dur: .5 });
+
+  // Scene 5 text
+  show($('#e5'), t, S5 + .08, S6 - .24, { dur: .5 });
+  show($('#h5'), t, S5 + .16, S6 - .24, { dur: .5 });
+
+  // ---------- Window ----------
+  const wIn = siteEase(seg(t, S2 + .26, S2 + .98));
+  const shape = inOut(seg(t, S5 + .03, S5 + .38));          // 4:3 → 16:9
+  const ww = lerp(WW, 1010, shape), wx = lerp(WX, 790, shape);
+  const ch = lerp(WH43, 1010 * 9 / 16, shape);
+  const top = (1080 - (ch + BAR + 2)) / 2;
+  win.style.left = wx + 'px'; win.style.top = top + 'px'; win.style.width = ww + 'px';
+  content.style.height = ch + 'px';
+  // relaunch in scene 4: close, then reopen
+  const close = easeIn(seg(t, S4 + .02, S4 + .24));
+  const reopen = siteEase(seg(t, S4 + .3, S4 + .66));
+  const shut = t < S4 + .3 ? close : 1 - reopen;
+  const wOut = easeIn(seg(t, S6 - .28, S6 - .02));
+  const wop = wIn * (1 - shut) * (1 - wOut);
+  win.style.opacity = wop; vis(win, wop > 0);
+  win.style.transform = `translateY(${(1 - wIn) * 70 - wOut * 20}px) scale(${1 - shut * .06})`;
+  $('#wlabel').textContent = t < S5 + .12 ? 'YOUR LIBRARY' : 'CRATE ROULETTE';
+
+  // Library layer + playback
+  const libOp = 1 - seg(t, S5, S5 + .16);
+  $('#lib').style.opacity = libOp; vis($('#lib'), libOp > 0);
+  const playing = t >= 6.0;
+  const pp = seg(t, 6.0, 8.2);
+  const [wx0, wy0] = lib([WAVE.x0, WAVE.y0]), [wx1, wy1] = lib([WAVE.x1, WAVE.y1]);
+  const px = lerp(wx0, wx1, pp);
+  Object.assign($('#tint').style, { left: wx0 + 'px', top: wy0 + 'px', width: Math.max(0, px - wx0) + 'px', height: (wy1 - wy0) + 'px', display: playing ? 'block' : 'none' });
+  Object.assign($('#playhead').style, { left: px - 1 + 'px', top: wy0 - 4 + 'px', height: (wy1 - wy0 + 8) + 'px', display: playing ? 'block' : 'none' });
+  const [bx, by] = lib(PLAY), br = 19.5 * SC * 2;
+  Object.assign($('#pausebtn').style, { left: bx - br / 2 + 'px', top: by - br / 2 + 'px', width: br + 'px', height: br + 'px', display: playing ? 'grid' : 'none' });
+  const dim = siteEase(seg(t, S3, S3 + .4));
+  $('#libdim').style.opacity = dim * .66;
+
+  // Callout (Library Sources)
+  const co = $('#callout');
+  const pop = siteEase(seg(t, S3 + .02, S3 + .5));
+  const coOut = easeIn(seg(t, S5 - .02, S5 + .16));
+  const src = lib([18, 185]), sw = (262 - 18) * SC;
+  const s0 = sw / 566;
+  const csc = lerp(s0, 1, pop);
+  const cx = lerp(src[0] - 44, 0, pop), cy = lerp(src[1] - 92, 0, pop);
+  const cop = clamp(pop * 3) * (1 - coOut);
+  co.style.opacity = cop; vis(co, cop > 0);
+  co.style.transform = `translate(${cx}px,${cy - coOut * 14}px) scale(${csc * (1 - coOut * .04)})`;
+  // rows appended by the two Add folder clicks
+  const addT = [26/3, 28/3];
+  [$('#r1'), $('#r2')].forEach((row, i) => {
+    const g = siteEase(seg(t, addT[i] + .03, addT[i] + .38));
+    row.style.height = 78 * g + 'px';
+    const inner = row.firstElementChild;
+    inner.style.opacity = clamp(g * 1.4 - .2);
+    inner.style.transform = `translateX(${(1 - g) * -18}px)`;
+  });
+  const n = 1 + (t >= addT[0] + .03) + (t >= addT[1] + .03);
+  $('#count').textContent = n + (n === 1 ? ' FOLDER' : ' FOLDERS');
+  // button press feedback
+  const press = (el, tc) => { const q = seg(t, tc, tc + .16); const d = Math.sin(q * Math.PI); el.style.transform = `scale(${1 - d * .05})`; el.style.filter = `brightness(${1 + d * .25})`; };
+  press($('#addbtn'), addT[0]); if (t > addT[0] + .2) press($('#addbtn'), addT[1]);
+  press($('#checkbtn'), 12.0);
+  $('#spin').style.transform = `rotate(${siteEase(seg(t, 12.0, 12.7)) * 360}deg)`;
+  // chips: saved index after relaunch, then compare results
+  const chipAt = [S4 + .72, S4 + .86, S4 + 1.0], resAt = [12.22, 12.38, 12.54];
+  ['#k0', '#k1', '#k2'].forEach((id, i) => {
+    const el = $(id);
+    const res = t >= resAt[i];
+    const html = !(t >= chipAt[i]) ? '' : !res ? '<span class="c-saved">✓ SAVED INDEX</span>'
+      : i === 1 ? '<span class="c-chg">CHANGES FOUND</span>' : '<span class="c-ok">UP TO DATE</span>';
+    if (el.dataset.h !== html) { el.innerHTML = html; el.dataset.h = html; }
+    const sp = el.firstElementChild;
+    if (sp) {
+      const k = siteEase(seg(t, res ? resAt[i] : chipAt[i], (res ? resAt[i] : chipAt[i]) + .3));
+      sp.style.opacity = k; sp.style.transform = `scale(${.7 + .3 * k})`; sp.style.transformOrigin = '100% 50%';
+    }
+  });
+  // selected row + checkbox on the folder with changes
+  const selK = t >= resAt[1] + .12;
+  const r1in = $('#r1').firstElementChild;
+  r1in.classList.toggle('sel', selK);
+  let chk = r1in.querySelector('.chk');
+  if (selK && !chk) { chk = document.createElement('span'); chk.className = 'chk on'; chk.textContent = '✓'; r1in.insertBefore(chk, r1in.firstChild); }
+  if (!selK && chk) chk.remove();
+  if (chk) { const k = siteEase(seg(t, resAt[1] + .12, resAt[1] + .4)); chk.style.transform = `scale(${.4 + .6 * k})`; chk.style.opacity = k; }
+  const scanK = siteEase(seg(t, 12.85, 13.2));
+  $('#scanrow').style.height = 62 * scanK + 'px';
+  $('#scanbtn').style.opacity = scanK;
+  const hov = seg(t, 13.45, 13.6);
+  $('#scanbtn').style.boxShadow = `0 0 ${24 * hov}px #ff6a1399`;
+  $('#scanbtn').style.filter = `brightness(${1 + hov * .08})`;
+
+  // Roulette frames
+  const rop = seg(t, S5 + .24, S5 + .38) * (1 - wOut);
+  roul.style.opacity = rop; vis(roul, rop > 0);
+  let fi = -1;
+  if (t >= S5 + .24) {
+    const reelA = S5 + .24, reelB = S5 + 4 / 3;
+    if (t < reelB) fi = Math.min(12, Math.floor(seg(t, reelA, reelB) * 13));
+    else fi = 13 + Math.min(39, Math.floor((t - reelB) * FPS + 1e-6));
+    const rv = t < reelB ? Math.max(0, 1 - seg(t, reelA, reelB) * 1.15) : 0;
+    $('#hblurS2').setAttribute('stdDeviation', `${(rv * 7).toFixed(2)} 0`);
+    roul.style.filter = rv > .02 ? 'url(#hblur2)' : 'none';
+  }
+  frameEls.forEach((im, i) => { im.style.visibility = i === fi ? 'visible' : 'hidden'; });
+
+  // Scene 6
+  const s6k = seg(t, S6 - .06, S6 + .2);
+  $('#s6').style.opacity = s6k; vis($('#s6'), s6k > 0);
+  if (s6k > 0) {
+    show($('#e6'), t, S6 + .02, null, { dur: .55, dy: 20 });
+    show($('#h6'), t, S6 + .08, null, { dur: .6, dy: 40 });
+    show($('#lock6'), t, S6 + .3, null, { dur: .55, dy: 24 });
+    show($('#meta6'), t, S6 + .42, null, { dur: .55, dy: 24 });
+    const ck = siteEase(seg(t, S6 + .56, S6 + 1.1));
+    const cta = $('#cta6');
+    cta.style.opacity = ck;
+    cta.style.transform = `translateX(-50%) translateY(${(1 - ck) * 26}px) scale(${1 + Math.sin(seg(t, 19.95, 20.35) * Math.PI) * .035})`;
+    const rk = siteEase(seg(t, S6 + .1, S6 + 1.2));
+    $('#outrorec').style.transform = `translateY(${-rk * 250}px) rotate(${(t - S6) * 34}deg)`;
+  }
+
+  // Cursor
+  if (!measuring) {
+    const c = cursorAt(t);
+    cursor.style.opacity = c.op; vis(cursor, c.op > 0);
+    let dip = 1;
+    let ringK = -1;
+    for (const tc of clicks) { const q = seg(t, tc - .06, tc + .14); if (q > 0 && q < 1) dip = 1 - Math.sin(q * Math.PI) * .12; const r = (t - tc) / .42; if (r >= 0 && r < 1) ringK = r; }
+    cursor.style.transform = `translate(${c.pos[0] - 4}px,${c.pos[1] - 3}px) scale(${dip})`;
+    if (ringK >= 0 && c.op > 0) {
+      vis(ring, true);
+      ring.style.opacity = (1 - ringK) * .85 * c.op;
+      ring.style.transform = `translate(${c.pos[0]}px,${c.pos[1]}px) scale(${.3 + ringK * .9})`;
+    } else vis(ring, false);
+  }
+}
+
+// Auto-fit headings to the text column (done once, before any frame).
+function fitHeadings() {
+  document.querySelectorAll('.col h2').forEach(h => {
+    let fs = parseFloat(getComputedStyle(h).fontSize);
+    h.style.whiteSpace = 'nowrap';
+    while (h.scrollWidth > 660 && fs > 50) { fs -= 2; h.style.fontSize = fs + 'px'; }
+  });
+}
+
+window.__ready = (async () => {
+  await document.fonts.load('400 20px Arial'); await document.fonts.load('italic 20px Georgia'); await document.fonts.load('700 20px Inter');
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(im => im.decode().catch(() => {})));
+  fitHeadings();
+  measure();
+  render(0);
+  return true;
+})();
+window.render = render;
+window.DURATION = DURATION;
+</script>
+</body>
+</html>

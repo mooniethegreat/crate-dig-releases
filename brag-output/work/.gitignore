@@ -1,0 +1,8 @@
+# Generated during the render; rebuild with audio.py / render.cjs
+venv/
+__pycache__/
+peek/
+stills/
+poster/
+*.wav
+video_silent.mp4

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-theme="dark" class="site-booting">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Critical startup UI must paint before any external stylesheet or script arrives. -->
+  <style>
+    html.site-booting{overflow:hidden;background:#080908}
+    .site-booting body>:not(#site-boot){visibility:hidden!important}
+    #site-boot{display:none}
+    .site-booting #site-boot{position:fixed;inset:0;z-index:2147483647;display:grid;place-content:center;justify-items:center;gap:22px;background:#080908;color:#afa79a;font:12px 'Courier New',monospace;letter-spacing:.14em;visibility:visible}
+    #site-boot svg{width:120px;height:120px;animation:boot-vinyl 1.8s linear infinite}
+    #site-boot p{margin:0}
+    #site-boot button{position:absolute;top:30px;right:clamp(20px,5vw,70px);border:1px solid #f7efdf40;border-radius:30px;padding:10px 17px;background:#080908;color:#dbe1d5;font:12px Arial,sans-serif;cursor:pointer}
+    @keyframes boot-vinyl{to{transform:rotate(360deg)}}
+    @media(prefers-reduced-motion:reduce){#site-boot svg{animation:none}}
+    [data-a11y-static] #site-boot svg{animation:none}
+  </style>
+  <noscript><style>html.site-booting{overflow:auto}.site-booting body>:not(#site-boot){visibility:visible!important}.site-booting #site-boot{display:none}</style></noscript>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      let active = true, started = performance.now(), deadline;
+      const release = () => {
+        active = false;
+        clearTimeout(deadline);
+        root.classList.remove('site-booting');
+      };
+      const arm = () => {
+        active = true;
+        started = performance.now();
+        root.classList.add('site-booting');
+        clearTimeout(deadline);
+        deadline = setTimeout(release, 12000);
+      };
+      window.CrateBoot = {
+        get active() { return active; },
+        release,
+        // Even a warm-cache launch gets a visible loading frame.
+        minimum: () => new Promise(resolve => setTimeout(resolve, Math.max(0, 350 - (performance.now() - started))))
+      };
+      arm();
+      // Cover the cached snapshot before leaving, then load first on Back/Forward too.
+      addEventListener('pagehide', () => { arm(); clearTimeout(deadline); });
+      addEventListener('pageshow', event => {
+        if (event.persisted) { arm(); window.CrateBoot.minimum().then(release); }
+      });
+    })();
+  </script>
+  <title>Crate Dig | Project Organizer</title>
+  <meta name="description" content="Rediscover your unfinished music. Browse projects, preview samples, build your own crates, and let Crate Roulette pick what comes next.">
+  <meta name="theme-color" content="#101210">
+  <link rel="icon" type="image/svg+xml" sizes="any" href="assets/favicon.svg"><link rel="stylesheet" href="style.css">
+  <link rel="preload" href="assets/vinyl.svg" as="image">
+  <script src="accessibility.js?v=1" defer></script><script src="app.js" defer></script>
+  <link rel="stylesheet" href="entrance.css?v=startup-2">
+  <script src="entrance.js?v=startup-2" defer></script><script src="bottom-vinyl.js" defer></script>
+<link rel="stylesheet" href="support.css?v=partner-nav-2">
+<link rel="stylesheet" href="accessibility.css?v=1"><style>.outro-record{height:340px;padding:0;border:0;background:transparent;z-index:0;touch-action:none;user-select:none;cursor:grab;border-radius:50%}.outro-record.dragging{cursor:grabbing}.outro-record img{width:100%;height:100%;pointer-events:none}</style></head>
+<body>
+  <section id="site-boot" aria-label="Loading Crate Dig">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="58" fill="#101210" stroke="#45483f"/><g fill="none" stroke="#30332c"><circle cx="60" cy="60" r="49"/><circle cx="60" cy="60" r="43"/><circle cx="60" cy="60" r="37"/></g><circle cx="60" cy="60" r="24" fill="#b77836"/><path d="M60 38a22 22 0 0 1 22 22" fill="none" stroke="#e1ad45" stroke-width="4"/><circle cx="60" cy="60" r="4" fill="#080908"/></svg>
+    <p role="status">LOADING THE STACKS…</p>
+    <button type="button" onclick="window.CrateBoot.release()">Skip intro ↗</button>
+  </section>
+  <a class="skip" href="#main">Skip to main content</a>
+  <header class="header">
+    <a class="brand" href="#top" aria-label="Crate Dig home"><img src="assets/crate-dig-logo-mark.svg" width="64" height="64" alt=""><span>Crate Dig</span></a>
+    <nav aria-label="Main navigation"><a href="#inside">The good stuff</a><a href="#roulette">Feeling lucky?</a><a class="support-link" href="support.html">Support</a><a class="partner-nav" href="mailto:cratedig@reply.munarmade.com?subject=Crate%20Dig%20affiliate%20program">Affiliate program</a></nav>
+    <div class="header-actions"><button id="theme-toggle" class="theme-toggle" aria-label="Switch to light mode" aria-pressed="false">Light mode ☼</button><a class="button small" href="https://buy.polar.sh/polar_cl_7OGdyaByNjEv5huckELpgjGTHZ5X9MXZ07Vfk2qD6hE">Get Crate Dig <span aria-hidden="true">↗</span></a></div>
+  </header>
+  <main tabindex="-1" id="main">
+    <section class="hero" id="top">
+      <div class="hero-art" aria-hidden="true">
+        <div class="record record-left"><img src="assets/vinyl.svg" width="1200" height="1200" alt=""></div>
+        <div class="record record-right"><img src="assets/vinyl.svg" width="1200" height="1200" alt=""></div>
+        <div class="record record-main"><img src="assets/vinyl.svg" width="1200" height="1200" alt=""></div>
+        <span class="record-tag tag-left">THE LOST SESSIONS<br>VOL. 001 / YOUR HARD DRIVE</span>
+        <span class="record-tag tag-right">STILL GOT IT.</span>
+      </div>
+      <div class="hero-copy"><p class="eyebrow">FOR THE IDEAS YOU ALMOST FORGOT.</p>
+      <h1>Your next idea<br>is <em>already in there.</em></h1>
+      <p class="intro">Turn your music folders into a collection worth digging through.</p>
+      <a class="button" href="#inside">Dig a little deeper <span aria-hidden="true">↓</span></a></div>
+      <div class="hero-bottom"><span>A NEW WAY INTO YOUR OLD IDEAS</span><span>SCROLL TO DIG ↓</span><span>MADE FOR MUSIC MAKERS</span></div>
+    </section>
+    <section class="statement" aria-labelledby="statement-title">
+      <p class="eyebrow">LESS SEARCHING. MORE MAKING.</p>
+      <h2 id="statement-title" class="word-reveal">That beat. That loop. That weird little idea at 2am. You made something good. Let’s find it again.</h2>
+      <div class="statement-bottom"><span class="tiny-disc" aria-hidden="true">↻</span><p>Crate Dig brings your projects and samples into one place.<br>So you can get back to the part you love.</p></div>
+    </section>
+    <section class="product" id="inside" aria-labelledby="product-title">
+      <div class="product-pin">
+      <div class="section-heading"><h2 id="product-title">Your projects. <span class="record-origin"><img class="handoff-record" src="assets/vinyl.svg" width="1200" height="1200" alt=""></span><em>Organized.</em></h2></div>
+      <div class="chapter-controls"><div class="scroll-hint"><span id="chapter-count">01 / 03</span><span>KEEP SCROLLING TO EXPLORE ↓</span></div><div class="preview-tabs" role="group" aria-label="Explore Crate Dig views"><button class="active" data-preview="library" aria-pressed="true"><b>01</b><span>Your library<small>Find your projects</small></span></button><button data-preview="crates" aria-pressed="false"><b>02</b><span>My Crates<small>Keep the good ones</small></span></button><button data-preview="roulette" aria-pressed="false"><b>03</b><span>Crate Roulette<small>Find a new starting point</small></span></button></div><p id="preview-description" class="preview-description" aria-live="polite">Your projects, versions, and samples. Together in one clean view.</p></div>
+      <div class="roulette-chapter" aria-hidden="true" inert><p class="eyebrow">CRATE ROULETTE — LET CHANCE START SOMETHING</p><h2>A little luck. <em>A new direction.</em></h2><div class="preview-tabs" role="group" aria-label="Explore Crate Roulette"><button data-roulette-step="0" class="active" aria-pressed="true"><b>01</b><span>Pull a record<small>Follow the reel</small></span></button><button data-roulette-step="1" aria-pressed="false"><b>02</b><span>Hear the spark<small>Preview your find</small></span></button><button data-roulette-step="2" aria-pressed="false"><b>03</b><span>Keep this one<small>Add to My Crates</small></span></button></div><p id="roulette-step-description" class="preview-description" aria-live="polite">Pull from your collection. Follow the needle as the reel slows down.</p></div><div class="product-stage"><div class="app-window"><div class="window-bar"><span class="window-dots" aria-hidden="true">● ● ●</span><span id="window-label">YOUR LIBRARY</span><span>CRATE DIG</span></div><div class="screen-gallery"><img class="screen active" data-screen="library" src="assets/library.png" width="1440" height="1080" alt="Clean Crate Dig demo library with Tranquil Hours, Repair and Heal, and sample waveforms." loading="lazy"><img class="screen" data-screen="crates" src="assets/crates.png" width="1440" height="1080" alt="My Crates showing Fresh Finds and curated project collections." loading="lazy"><div class="screen roulette-demo" data-screen="roulette"><img id="roulette-reel-capture" class="roulette-view shown" data-roulette-view="pull" src="assets/roulette-real-reel.jpg" alt="Actual Crate Roulette strip reel captured from Crate Dig."><img class="roulette-view" id="roulette-capture" data-roulette-view="preview" src="assets/roulette-frames/sample-01.webp" alt="Actual LAXCITY sample playback captured from Crate Dig"><div class="roulette-view drawer-focus" data-roulette-view="save"><img class="drawer-dim" src="assets/roulette-real-drawer.jpg" alt=""><img class="drawer-clear" src="assets/roulette-real-drawer.jpg" alt="Add to My Crates drawer with Fresh Finds, TOOLS, Future Riddim, and Create New Crate."></div></div><span class="record-dock" aria-hidden="true"></span></div></div></div>
+      <div class="roulette-copy" id="roulette"><p class="eyebrow">FOLLOW A HAPPY ACCIDENT</p><h2 id="roulette-title">Less overthinking.<br><em>More “oh, this one.”</em></h2><p>Crate Roulette pulls a project or sample from your collection. Sometimes a little chance is all you need.</p><a class="button" href="#get">Find your next idea <span aria-hidden="true">↗</span></a></div>
+      <div class="scroll-track" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+    <section class="daw-section" aria-label="Supported music production tools"><div class="daw-heading"><p class="eyebrow">YOUR PROJECTS. YOUR TOOLS.</p><button id="ticker-toggle" aria-pressed="false">Pause ticker Ⅱ</button></div><div class="daw-ticker"><div class="daw-track"><div class="daw-group"><span><img src="assets/daws/ableton-live.png" width="48" height="48" alt="">Ableton Live</span><span><img src="assets/daws/fl-studio.png" width="48" height="48" alt="">FL Studio</span><span><img src="assets/daws/cubase.png" width="48" height="48" alt="">Cubase</span><span><img src="assets/daws/reaper.png" width="48" height="48" alt="">REAPER</span><span><img src="assets/daws/pro-tools.png" width="48" height="48" alt="">Pro Tools</span><span><img src="assets/daws/bitwig-studio.png" width="48" height="48" alt="">Bitwig Studio</span><span><img src="assets/daws/reason.png" width="48" height="48" alt="">Reason</span><span><img src="assets/daws/logic-pro.png" class="native-logo" width="48" height="48" alt="">Logic Pro</span><span><img src="assets/daws/studio-one.png" class="native-logo" width="48" height="48" alt="">Studio One</span></div></div></div></section>
+    <section class="principles" aria-labelledby="principles-title"><div><p class="eyebrow">03 — KEEP WHAT MAKES IT YOURS</p><h2 id="principles-title">Your music.<br>Your mess.<br><em>Your next move.</em></h2></div><div class="principle-list"><article><span>01</span><div><h3>Right where you left it.</h3><p>Your music stays on your drive. Crate Dig doesn’t rename, move, or change your original files.</p></div></article><article><span>02</span><div><h3>Keep the sparks together.</h3><p>Rate projects, favorite samples, and organize My Crates around whatever you want to make next.</p></div></article><article><span>03</span><div><h3>Back to making music.</h3><p>Preview samples, scrub waveforms, and open projects in their associated DAW. Less folder hopping. More flow.</p></div></article></div></section>
+    <section class="checkout" id="get" aria-labelledby="checkout-title"><p class="eyebrow">THERE’S SOMETHING GOOD IN THERE.</p><h2 id="checkout-title">Go on.<br><em>Dig it up.</em></h2><p>Your unfinished ideas deserve another listen.</p><div class="no-subscriptions" aria-label="No subscriptions"><img src="assets/no-subscriptions.svg" width="34" height="34" alt=""><span>No subscriptions.<small>One purchase. A lifetime license.</small></span></div><div class="launch-price"><strong>$14.99</strong><span>USD · one-time purchase</span></div><a class="button" aria-label="Buy Crate Dig — checkout with Polar" id="checkout-link" href="https://buy.polar.sh/polar_cl_7OGdyaByNjEv5huckELpgjGTHZ5X9MXZ07Vfk2qD6hE">Get Crate Dig <span aria-hidden="true">↗</span></a><div class="purchase-notes"><span>One-time purchase</span><span>2 activations</span><span>Checkout with Polar</span></div><button class="outro-record" type="button" aria-label="Spin vinyl record. Drag to rotate, or use left and right arrow keys."><img src="assets/vinyl.svg" width="1200" height="1200" alt="" loading="lazy" draggable="false"></button></section>
+  </main>
+  <footer><a class="brand" href="#top"><span>crate dig.</span></a><span>MAKE SOMETHING OUT OF WHAT YOU’VE GOT.</span><a href="support.html">Support</a><a href="#top">Back to the top ↑</a></footer>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4364d6158cfc5e9',t:'MTc5MDgwMzU0OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
