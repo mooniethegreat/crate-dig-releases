@@ -1,0 +1,2 @@
+Crate Dig 1.0.9 is out. It remembers every music folder you add and opens your saved index without rescanning at every launch. Hit "Check for crate updates" only when you want a fresh dig.
+Windows & Mac, $14.99 once, no subscriptions → cratedig.app (thanks Gregory G. and David B. for the feedback)
