@@ -12,8 +12,8 @@ Installers for [Crate Dig](https://cratedig.app). Every release is on the
 | macOS 13+ (Intel) | `Crate-Dig-<version>-x64.dmg` |
 
 
-Mac 1.1.1 is released for Apple Silicon and Intel. The Windows download remains
-the signed 1.0.10 build while Windows 1.1.1 is prepared.
+Crate Dig 1.1.1 is available for Windows x64 and for Apple Silicon and Intel Macs.
+The Windows setup includes the Main and Mini VST3 plugins.
 
 Install, then paste the license key from your receipt on the first screen.
 One key works on two machines; free a slot from Settings → License.
